@@ -3,16 +3,17 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { API_URL } from '../../config/api';
 
 const HeroeComponent = () => {
   const navigate = useNavigate();
-  const endpoint = 'https://crud-heroes-service.vercel.app/api';
+  const endpoint = API_URL;
   const { id } = useParams();
 
   // Estados principales
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const isEditing = Boolean(id && id !== 'nuevo');
 
   // Estados del formulario
   const [formData, setFormData] = useState({
@@ -20,22 +21,6 @@ const HeroeComponent = () => {
     poder: '',
     estado: true, // Por defecto "vivo"
   });
-
-  useEffect(() => {
-    // Determinar si estamos editando o creando
-    if (id && id !== 'nuevo') {
-      setIsEditing(true);
-      getHeroeById(id);
-    } else {
-      setIsEditing(false);
-      // Resetear formulario para nuevo héroe
-      setFormData({
-        nombre: '',
-        poder: '',
-        estado: true,
-      });
-    }
-  }, [id]);
 
   const getHeroeById = async heroeId => {
     setLoading(true);
@@ -66,6 +51,20 @@ const HeroeComponent = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (isEditing) {
+      getHeroeById(id);
+    } else {
+      // Resetear formulario para nuevo héroe
+      setFormData({
+        nombre: '',
+        poder: '',
+        estado: true,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -197,7 +196,7 @@ const HeroeComponent = () => {
       </h1>
       <hr />
 
-      <div className="row text-right mb-3">
+      <div className="row text-end mb-3">
         <div className="col">
           <Link to="/heroes" className="btn btn-outline-primary" title="Volver">
             <FontAwesomeIcon icon="arrow-left" /> Volver

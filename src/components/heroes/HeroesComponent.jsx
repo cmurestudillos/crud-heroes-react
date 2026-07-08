@@ -3,16 +3,13 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { API_URL } from '../../config/api';
 
 const HeroesComponent = () => {
-  const endpoint = 'https://crud-heroes-service.vercel.app/api';
+  const endpoint = API_URL;
   const [heroes, setHeroes] = useState([]);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    getHeroes();
-  }, []);
 
   const getHeroes = async () => {
     setCargando(true);
@@ -42,6 +39,11 @@ const HeroesComponent = () => {
       setCargando(false);
     }
   };
+
+  useEffect(() => {
+    getHeroes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const borrarHeroe = async heroeId => {
     try {
@@ -97,7 +99,7 @@ const HeroesComponent = () => {
       <hr />
 
       <div className="row">
-        <div className="col text-right">
+        <div className="col text-end">
           <Link to="/heroe/nuevo" className="btn btn-outline-primary" title="Alta">
             <FontAwesomeIcon icon="plus" /> Nuevo
           </Link>
