@@ -1,0 +1,4 @@
+# pnpm-workspace.yaml es solo la aprobación local de build scripts (pnpm 10+).
+# Vercel usa pnpm 9.x, que lo interpreta como un workspace inválido
+# ("packages field missing or empty"). Nunca debe subirse al deploy.
+pnpm-workspace.yaml
